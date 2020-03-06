@@ -1,0 +1,9 @@
+syntax = "proto3";
+package index;
+
+import "./dep/common.proto";
+import "test/idl/dep/base.proto";
+
+message User {}
+
+service Index {}
