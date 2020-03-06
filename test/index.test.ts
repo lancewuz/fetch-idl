@@ -4,10 +4,11 @@ import fetchIdl from '../src';
 
 const repository = 'git@github.com:lancewuz/fetch-idl.git';
 const branch = 'feat-test';
+const threshold = 9000;
 
 describe('fetch idl', () => {
-  it('should fail due to invalid repository', function() {
-    this.timeout(8000);
+  it('should fail due to invalid repository', function invalidRepo() {
+    this.timeout(threshold);
     try {
       fetchIdl(
         'git@github.com:lancewuz/invalid-repo/',
@@ -22,8 +23,8 @@ describe('fetch idl', () => {
     throw new Error('no errors');
   });
 
-  it('should fail due to nonexistent repository', function() {
-    this.timeout(8000);
+  it('should fail due to nonexistent repository', function nonexistentRepo() {
+    this.timeout(threshold);
     try {
       fetchIdl(
         'git@github.com:lancewuz/nonexistent-repo.git/',
@@ -40,13 +41,13 @@ describe('fetch idl', () => {
     throw new Error('no errors');
   });
 
-  it('should fetch thrift files', function() {
-    this.timeout(8000);
+  it('should fetch thrift files', function fetchThrift() {
+    this.timeout(threshold);
     fetchIdl(repository, branch, ['test/idl/index.thrift'], 'test/temp');
   });
 
-  it('should fetch proto files', function() {
-    this.timeout(8000);
+  it('should fetch proto files', function fetchProto() {
+    this.timeout(threshold);
     fetchIdl(repository, branch, ['test/idl/index.proto'], 'test/temp');
   });
 
