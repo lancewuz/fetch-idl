@@ -1,3 +1,4 @@
 syntax = "proto3";
+import "google/protobuf/descriptor.proto"; 
 
 message Foo {}
