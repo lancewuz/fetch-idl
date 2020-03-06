@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign */
 
 import * as shell from 'shelljs';
-import * as crypto from 'crypto';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as proto from 'proto-parser';
 import * as thrift from '@creditkarma/thrift-parser';
+
+const repositoryReferMap: Record<string, number> = {};
 
 function gitClone(repository: string, branch: string) {
   let repositoryUrl = repository.trim();
@@ -21,8 +22,20 @@ function gitClone(repository: string, branch: string) {
     0,
     -4
   );
-  const random = crypto.randomBytes(4).toString('hex');
-  const tempDirectory = `${process.env.TMPDIR}git-${repositoryName}-${process.pid}-${random}`;
+  const minute = Math.floor(Date.now() / (1000 * 60));
+  const tempDirectory = `${process.env.TMPDIR}git-${repositoryName}-${process.pid}-${minute}`;
+
+  if (tempDirectory in repositoryReferMap) {
+    repositoryReferMap[tempDirectory] += 1;
+  } else {
+    repositoryReferMap[tempDirectory] = 1;
+  }
+
+  // reuse the repository within a minute
+  if (fs.existsSync(tempDirectory)) {
+    return tempDirectory;
+  }
+
   const command = `git clone ${repositoryUrl} ${tempDirectory} --depth=1 --no-tags --branch ${branch}`;
   const result = shell.exec(command);
 
@@ -137,7 +150,7 @@ function writeFileSync(filename: string, content: string | Buffer) {
   fs.writeFileSync(filename, content);
 }
 
-export default async function fetchIdl(
+export default function fetchIdl(
   repository: string,
   branch: string,
   entries: string[],
@@ -169,9 +182,20 @@ export default async function fetchIdl(
     writeFileSync(copyFilePath, fileMap[filename]);
   }
 
-  // delete the temporary directory
-  shell.rm('-rf', tempDirectory);
+  setTimeout(() => {
+    repositoryReferMap[tempDirectory] -= 1;
 
-  // throw error
-  if (typeof error !== 'undefined') throw error;
+    // delete the directory when reference equals to 0
+    if (repositoryReferMap[tempDirectory] === 0) {
+      shell.rm('-rf', tempDirectory);
+    }
+  }, 100);
+
+  // clean and throw error
+  if (typeof error !== 'undefined') {
+    if (repositoryReferMap[tempDirectory] === 0) {
+      shell.rm('-rf', tempDirectory);
+    }
+    throw error;
+  }
 }

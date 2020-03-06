@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && npx tsc",
-    "test": "mocha --require ts-node/register test/*.test.ts",
+    "test": "rm -rf test/temp && mocha --require ts-node/register test/*.test.ts",
     "cover": "nyc -e=.ts npm run test",
     "upload-cover": "sh ./script/upload_codecov.sh",
     "changelog": "standard-changelog -i CHANGELOG.md -s -r 0 -v",
