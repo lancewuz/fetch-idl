@@ -33,10 +33,10 @@
     "dist"
   ],
   "dependencies": {
-    "@types/shelljs": "^0.8.6",
-    "shelljs": "^0.8.3",
     "@creditkarma/thrift-parser": "^1.2.0",
-    "proto-parser": "0.0.4"
+    "@types/shelljs": "^0.8.6",
+    "proto-parser": "0.0.4",
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.1.0",

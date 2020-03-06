@@ -36,11 +36,13 @@ function gitClone(repository: string, branch: string) {
     return tempDirectory;
   }
 
-  const command = `git clone ${repositoryUrl} ${tempDirectory} --depth=1 --no-tags --branch ${branch}`;
+  const command = `git clone ${repositoryUrl} ${tempDirectory} --depth=1 --no-tags --quiet --branch ${branch}`;
   const result = shell.exec(command);
 
   if (result.code !== 0) {
     const stderr = result.stderr as string;
+
+    /* istanbul ignore next */
     const message = stderr.split('fatal:')[1] || 'git clone failed';
     throw new Error(message);
   }
@@ -72,10 +74,9 @@ function getThriftFileMap(
     (document as thrift.ThriftErrors).type === thrift.SyntaxType.ThriftErrors
   ) {
     const error = (document as thrift.ThriftErrors).errors[0];
-    console.log(error);
-    // const { start } = error.loc;
-    // const message = `${error.message}(${filename}:${start.line}:${start.column})`;
-    // throw new Error(message);
+    const { start } = error.loc;
+    const message = `${error.message}(${filename}:${start.line}:${start.column})`;
+    throw new Error(message);
   }
 
   for (const statement of (document as thrift.ThriftDocument).body) {
@@ -167,6 +168,7 @@ export default function fetchIdl(
 
   try {
     for (const entry of entries) {
+      /* istanbul ignore else */
       if (/\.thrift$/.test(entry)) {
         getThriftFileMap(entry, tempDirectory, './index', fileMap);
       } else if (/\.proto$/.test(entry)) {
@@ -188,8 +190,8 @@ export default function fetchIdl(
     repositoryReferMap[tempDirectory] -= 1;
 
     // delete the directory when reference equals to 0
+    /* istanbul ignore next */
     if (repositoryReferMap[tempDirectory] === 0) {
-      /* istanbul ignore next */
       shell.rm('-rf', tempDirectory);
     }
 
