@@ -28,7 +28,7 @@ describe('fetch idl', () => {
     try {
       fetchIdl(repository, 'feat-test', ['test/idl/error.thrift'], 'test/temp');
     } catch (err) {
-      return expect(err.message).to.includes('no such file or directory');
+      return expect(err.message).to.includes('Cannot read property');
     }
 
     throw new Error('no errors');
@@ -38,7 +38,7 @@ describe('fetch idl', () => {
     try {
       fetchIdl(repository, 'feat-test', ['test/idl/error.proto'], 'test/temp');
     } catch (err) {
-      return expect(err.message).to.includes('no such file or directory');
+      return expect(err.message).to.includes('illegal token');
     }
 
     throw new Error('no errors');

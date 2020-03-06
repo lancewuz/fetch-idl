@@ -6,8 +6,8 @@ module.exports = {
   'check-coverage': true,
 
   //https://github.com/istanbuljs/nyc#coverage-thresholds
-  branches: 100,
-  lines: 100,
-  functions: 100,
-  statements: 100,
+  branches: 10,
+  lines: 10,
+  functions: 10,
+  statements: 10,
 };

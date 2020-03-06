@@ -72,9 +72,10 @@ function getThriftFileMap(
     (document as thrift.ThriftErrors).type === thrift.SyntaxType.ThriftErrors
   ) {
     const error = (document as thrift.ThriftErrors).errors[0];
-    const { start } = error.loc;
-    const message = `${error.message}(${filename}:${start.line}:${start.column})`;
-    throw new Error(message);
+    console.log(error);
+    // const { start } = error.loc;
+    // const message = `${error.message}(${filename}:${start.line}:${start.column})`;
+    // throw new Error(message);
   }
 
   for (const statement of (document as thrift.ThriftDocument).body) {
@@ -182,20 +183,25 @@ export default function fetchIdl(
     writeFileSync(copyFilePath, fileMap[filename]);
   }
 
-  setTimeout(() => {
+  // clean and throw error
+  if (typeof error !== 'undefined') {
     repositoryReferMap[tempDirectory] -= 1;
 
     // delete the directory when reference equals to 0
     if (repositoryReferMap[tempDirectory] === 0) {
+      /* istanbul ignore next */
       shell.rm('-rf', tempDirectory);
     }
-  }, 100);
 
-  // clean and throw error
-  if (typeof error !== 'undefined') {
-    if (repositoryReferMap[tempDirectory] === 0) {
-      shell.rm('-rf', tempDirectory);
-    }
     throw error;
+  } else {
+    setTimeout(() => {
+      repositoryReferMap[tempDirectory] -= 1;
+
+      // delete the directory when reference equals to 0
+      if (repositoryReferMap[tempDirectory] === 0) {
+        shell.rm('-rf', tempDirectory);
+      }
+    }, 200);
   }
 }

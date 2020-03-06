@@ -1,1 +1,1 @@
-structt
+struct Foo {}]
