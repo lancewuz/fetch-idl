@@ -1,4 +1,4 @@
-# fetch-idl
+# fetch-idl [![CircleCI](https://circleci.com/gh/lancewuz/fetch-idl.svg?style=svg)](https://circleci.com/gh/lancewuz/fetch-idl) [![codecov](https://codecov.io/gh/lancewuz/fetch-idl/branch/master/graph/badge.svg)](https://codecov.io/gh/lancewuz/fetch-idl) [![npm version](https://img.shields.io/npm/v/fetch-idl.svg?style=flat)](https://www.npmjs.com/package/fetch-idl)
 
 Fetch Thrift or Proto files from [Git Repositories](https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a)
 
@@ -15,8 +15,8 @@ npm install fetch-idl --save
 ```ts
 import fetchIdl from 'fetch-idl'
 
-const repository = '';
-fetchIdl(repository, 'master', [''], '.');
+const repository = 'git@github.com:lancewuz/fetch-idl.git';
+fetchIdl(repository, 'feat-test', ['test/idl/index.thrift'], `temp`);
 
 ```
 
