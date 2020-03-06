@@ -36,7 +36,7 @@ function gitClone(repository: string, branch: string) {
     return tempDirectory;
   }
 
-  const command = `git clone ${repositoryUrl} ${tempDirectory} --depth=1 --no-tags --quiet --branch ${branch}`;
+  const command = `git clone ${repositoryUrl} ${tempDirectory} --depth=1 --quiet --branch ${branch}`;
   const result = shell.exec(command);
 
   if (result.code !== 0) {
