@@ -1,0 +1,7 @@
+syntax = "proto3";
+package common;
+
+import "./common.proto";
+import "./entry/foo.proto";
+
+message Common {}
