@@ -1,0 +1,63 @@
+{
+  "name": "fetch-idl",
+  "version": "0.0.0",
+  "description": "Fetch Thrift or Proto files from Git Repositories",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && npx tsc",
+    "test": "mocha --require ts-node/register test/*.test.ts",
+    "cover": "nyc -e=.ts npm run test",
+    "upload-cover": "sh ./script/upload_codecov.sh",
+    "changelog": "standard-changelog -i CHANGELOG.md -s -r 0 -v",
+    "version": "./script/version.sh $npm_package_version",
+    "postversion": "./script/post_version.sh $npm_package_version",
+    "prettier": "prettier --write '{src,test}/**/*.ts'",
+    "eslint": "eslint --fix {src,test}/*.ts {src,test}/**/*.ts"
+  },
+  "author": "lancewuz",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lancewuz/fetch-idl.git"
+  },
+  "homepage": "https://github.com/lancewuz/fetch-idl.git",
+  "keywords": [
+    "proto",
+    "thrift",
+    "idl",
+    "parser",
+    "fetch",
+    "git"
+  ],
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@types/shelljs": "^0.8.6",
+    "shelljs": "^0.8.3",
+    "@creditkarma/thrift-parser": "^1.2.0",
+    "proto-parser": "0.0.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "@types/chai": "^4.2.3",
+    "@types/expect": "^1.20.1",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^8.10.0",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^7.0.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "expect": "^1.20.2",
+    "husky": "^3.0.1",
+    "mocha": "^3.5.3",
+    "nyc": "^14.1.1",
+    "prettier": "^1.18.2",
+    "standard-changelog": "^2.0.11",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  }
+}
