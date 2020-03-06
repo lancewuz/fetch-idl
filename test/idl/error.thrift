@@ -1,1 +1,1 @@
-struct Error
+structt
