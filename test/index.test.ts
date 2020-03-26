@@ -52,21 +52,6 @@ describe('fetch idl', () => {
     throw new Error('no errors');
   });
 
-  it('should fetch thrift files', function fetchThrift() {
-    this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/index.thrift', 'test/temp');
-  });
-
-  it('should fetch thrift files with glob', function fetchThrift() {
-    this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/!(error|index).thrift', 'test/temp');
-  });
-
-  it('should fetch proto files', function fetchProto() {
-    this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/index.proto', 'test/temp');
-  });
-
   it('should fail due to invalid entryGlob', () => {
     try {
       fetchIdl(repository, branch, undefined as any, 'test/temp');
@@ -75,6 +60,21 @@ describe('fetch idl', () => {
     }
 
     throw new Error('no errors');
+  });
+
+  it('should fetch thrift files with glob', function fetchThrift() {
+    this.timeout(threshold);
+    fetchIdl(repository, branch, 'test/idl/!(error|index).thrift', 'test/temp');
+  });
+
+  it('should fetch thrift files', function fetchThrift() {
+    this.timeout(threshold);
+    fetchIdl(repository, branch, 'test/idl/index.thrift', 'test/temp');
+  });
+
+  it('should fetch proto files', function fetchProto() {
+    this.timeout(threshold);
+    fetchIdl(repository, branch, 'test/idl/index.proto', 'test/temp');
   });
 
   it('should fail due to empty entryGlob', () => {

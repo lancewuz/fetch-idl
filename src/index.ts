@@ -167,7 +167,7 @@ export default function fetchIdl(
   const tempDir = gitClone(repository, branch);
 
   const filePaths = glob
-    .sync(entryGlob as string)
+    .sync(entryGlob as string, { cwd: tempDir })
     .filter((filePath: string) => /\.((thrift)|(proto))$/.test(filePath));
 
   if (filePaths.length === 0) {
