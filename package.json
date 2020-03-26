@@ -1,6 +1,6 @@
 {
   "name": "fetch-idl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Fetch Thrift or Proto files from Git Repositories",
   "main": "dist/index.js",
   "scripts": {

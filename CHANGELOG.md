@@ -1,3 +1,12 @@
+## [0.0.3](https://github.com/lancewuz/fetch-idl/compare/v0.0.2...v0.0.3) (2020-03-26)
+
+
+### Bug Fixes
+
+* glob cwd ([18bb09d](https://github.com/lancewuz/fetch-idl/commit/18bb09d1e93666304c91a350654d9cf64743c081))
+
+
+
 ## [0.0.2](https://github.com/lancewuz/fetch-idl/compare/v0.0.1...v0.0.2) (2020-03-25)
 
 
