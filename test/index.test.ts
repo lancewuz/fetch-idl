@@ -1,5 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
+import * as shell from 'shelljs';
 import fetchIdl from '../src';
 
 const repository = 'git@github.com:lancewuz/fetch-idl.git';
@@ -7,6 +8,11 @@ const branch = 'feat-test';
 const threshold = 9000;
 
 describe('fetch idl', () => {
+  after(() => {
+    const deleteFiles = `${process.env.TMPDIR}git-*`;
+    shell.rm('-rf', deleteFiles);
+  });
+
   it('should fail due to invalid repository', function invalidRepo() {
     this.timeout(threshold);
     try {
