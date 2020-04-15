@@ -36,7 +36,7 @@
     "@creditkarma/thrift-parser": "^1.2.0",
     "@types/shelljs": "^0.8.6",
     "glob": "^7.1.6",
-    "proto-parser": "0.0.4",
+    "proto-parser": "0.0.5",
     "shelljs": "^0.8.3"
   },
   "devDependencies": {

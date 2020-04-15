@@ -94,7 +94,7 @@ function getProtoFileMap(
   parentPath: string,
   fileMap: Record<string, string>
 ) {
-  if (/google\/protobuf/.test(filename)) return;
+  if (/^google\/protobuf/.test(filename)) return;
 
   // absolute path
   let filePath = filename;
@@ -108,7 +108,7 @@ function getProtoFileMap(
   fileMap[filePath] = content;
 
   // parse content
-  const document = proto.parse(content);
+  const document = proto.parse(content, { weakResolve: true });
   if (
     (document as proto.ProtoError).syntaxType === proto.SyntaxType.ProtoError
   ) {
@@ -158,16 +158,19 @@ export default function fetchIdl(
   branch: string,
   entryGlob: string,
   /* istanbul ignore next */
-  outDir = 'idl'
+  outDir = 'idl',
+  /* istanbul ignore next */
+  rootDir = '.'
 ) {
   if (typeof entryGlob !== 'string' || entryGlob === '') {
     throw new Error('invalid entryGlob');
   }
 
   const tempDir = gitClone(repository, branch);
+  const idlRootDir = path.resolve(tempDir, rootDir);
 
   const filePaths = glob
-    .sync(entryGlob as string, { cwd: tempDir })
+    .sync(entryGlob as string, { cwd: idlRootDir })
     .filter((filePath: string) => /\.((thrift)|(proto))$/.test(filePath));
 
   if (filePaths.length === 0) {
@@ -181,9 +184,9 @@ export default function fetchIdl(
     for (const entry of filePaths) {
       /* istanbul ignore else */
       if (/\.thrift$/.test(entry)) {
-        getThriftFileMap(entry, tempDir, './index', fileMap);
+        getThriftFileMap(entry, idlRootDir, './index', fileMap);
       } else if (/\.proto$/.test(entry)) {
-        getProtoFileMap(entry, tempDir, './index', fileMap);
+        getProtoFileMap(entry, idlRootDir, './index', fileMap);
       }
     }
   } catch (err) {
