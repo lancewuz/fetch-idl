@@ -1,3 +1,12 @@
+## [0.0.4](https://github.com/lancewuz/fetch-idl/compare/v0.0.3...v0.0.4) (2020-04-15)
+
+
+### Features
+
+* support rootDir ([086d68f](https://github.com/lancewuz/fetch-idl/commit/086d68f606442565ee2f1a16a544df9dde1f1b37))
+
+
+
 ## [0.0.3](https://github.com/lancewuz/fetch-idl/compare/v0.0.2...v0.0.3) (2020-03-26)
 
 
