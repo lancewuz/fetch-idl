@@ -4,10 +4,20 @@ import * as shell from 'shelljs';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as glob from 'glob';
-import * as proto from 'proto-parser';
-import * as thrift from '@creditkarma/thrift-parser';
+// import * as proto from 'proto-parser';
+import 'core-js/features/string/match-all';
+// import * as thrift from '@creditkarma/thrift-parser';
 
 const repositoryReferMap: Record<string, number> = {};
+
+function getIncludePaths(text: string) {
+  const regExp = /(?<!(\/\/|\/\*|#).*)(include|cpp_include|import)\s+(['"])(.*?)\3/g;
+  const matches: any[] = Array.from(
+    (text as any).matchAll(regExp) /* istanbul ignore next */ || []
+  );
+  const includePaths = matches.map(match => match[4]);
+  return includePaths;
+}
 
 function gitClone(repository: string, branch: string) {
   let repositoryUrl = repository.trim();
@@ -51,77 +61,42 @@ function gitClone(repository: string, branch: string) {
   return tempDir;
 }
 
-function getThriftFileMap(
+function getIdlFileMap(
   filename: string,
   tempDir: string,
   parentPath: string,
   fileMap: Record<string, string>
 ) {
-  // absolute path
-  let filePath = filename;
-  // relative path
-  if (filename[0] === '.') {
-    filePath = path.join(path.dirname(parentPath), filename);
+  if (/^google\/protobuf/.test(filename)) {
+    return;
   }
 
-  if (filePath in fileMap) return;
-  const content = fs.readFileSync(path.resolve(tempDir, filePath), 'utf8');
-  fileMap[filePath] = content;
+  // try relative path
+  let filePath = path.join(path.dirname(parentPath), filename);
+  let fullFilePath = path.resolve(tempDir, filePath);
+  if (!fs.existsSync(fullFilePath)) {
+    // try absolute path
+    /* istanbul ignore else */
+    if (filename[0] !== '.') {
+      filePath = filename;
+      fullFilePath = path.resolve(tempDir, filePath);
+    }
 
-  // parse content
-  const document = thrift.parse(content);
-
-  if (
-    (document as thrift.ThriftErrors).type === thrift.SyntaxType.ThriftErrors
-  ) {
-    const error = (document as thrift.ThriftErrors).errors[0];
-    const { start } = error.loc;
-    const message = `${error.message}(${filename}:${start.line}:${start.column})`;
-    throw new Error(message);
-  }
-
-  for (const statement of (document as thrift.ThriftDocument).body) {
-    if (statement.type === thrift.SyntaxType.IncludeDefinition) {
-      const includeFilePath = statement.path.value;
-      getThriftFileMap(includeFilePath, tempDir, filePath, fileMap);
+    /* istanbul ignore next */
+    if (!fs.existsSync(fullFilePath)) {
+      // eslint-disable-next-line no-console
+      console.log(`invalid refer path: ${filename}`);
+      return;
     }
   }
-}
-
-function getProtoFileMap(
-  filename: string,
-  tempDir: string,
-  parentPath: string,
-  fileMap: Record<string, string>
-) {
-  if (/^google\/protobuf/.test(filename)) return;
-
-  // absolute path
-  let filePath = filename;
-  // relative path
-  if (filename[0] === '.') {
-    filePath = path.join(path.dirname(parentPath), filename);
-  }
 
   if (filePath in fileMap) return;
-  const content = fs.readFileSync(path.resolve(tempDir, filePath), 'utf8');
+  const content = fs.readFileSync(fullFilePath, 'utf8');
   fileMap[filePath] = content;
 
-  // parse content
-  const document = proto.parse(content, { weakResolve: true });
-  if (
-    (document as proto.ProtoError).syntaxType === proto.SyntaxType.ProtoError
-  ) {
-    const { line, message } = document as proto.ProtoError;
-    const fullMessage = `${message}(${filePath}:${line}:0)`;
-    throw new Error(fullMessage);
-  }
-
-  const { imports } = document as proto.ProtoDocument;
-  if (imports && imports.length > 0) {
-    imports.forEach(importPath => {
-      getProtoFileMap(importPath, tempDir, filePath, fileMap);
-    });
+  const includePaths = getIncludePaths(content);
+  for (const includePath of includePaths) {
+    getIdlFileMap(includePath, tempDir, filePath, fileMap);
   }
 }
 
@@ -178,19 +153,9 @@ export default function fetchIdl(
   }
 
   const fileMap: Record<string, string> = {};
-  let error: Error | undefined;
 
-  try {
-    for (const entry of filePaths) {
-      /* istanbul ignore else */
-      if (/\.thrift$/.test(entry)) {
-        getThriftFileMap(entry, idlRootDir, './index', fileMap);
-      } else if (/\.proto$/.test(entry)) {
-        getProtoFileMap(entry, idlRootDir, './index', fileMap);
-      }
-    }
-  } catch (err) {
-    error = err;
+  for (const entry of filePaths) {
+    getIdlFileMap(entry, idlRootDir, './index', fileMap);
   }
 
   // wite valid files
@@ -199,8 +164,20 @@ export default function fetchIdl(
     writeFileSync(copyFilePath, fileMap[filename]);
   }
 
-  // clean and throw error
-  if (typeof error !== 'undefined') {
+  // // clean and throw error
+  // if (typeof error !== 'undefined') {
+  //   repositoryReferMap[tempDir] -= 1;
+
+  //   // delete the outDir when reference equals to 0
+  //   /* istanbul ignore next */
+  //   if (repositoryReferMap[tempDir] === 0) {
+  //     shell.rm('-rf', tempDir);
+  //   }
+
+  //   throw error;
+  // }
+
+  setTimeout(() => {
     repositoryReferMap[tempDir] -= 1;
 
     // delete the outDir when reference equals to 0
@@ -208,17 +185,5 @@ export default function fetchIdl(
     if (repositoryReferMap[tempDir] === 0) {
       shell.rm('-rf', tempDir);
     }
-
-    throw error;
-  } else {
-    setTimeout(() => {
-      repositoryReferMap[tempDir] -= 1;
-
-      // delete the outDir when reference equals to 0
-      /* istanbul ignore next */
-      if (repositoryReferMap[tempDir] === 0) {
-        shell.rm('-rf', tempDir);
-      }
-    }, 200);
-  }
+  }, 200);
 }
