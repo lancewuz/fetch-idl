@@ -1,3 +1,13 @@
+## [0.0.5](https://github.com/lancewuz/fetch-idl/compare/v0.0.4...v0.0.5) (2020-08-14)
+
+
+### Features
+
+* include path ([ba4f399](https://github.com/lancewuz/fetch-idl/commit/ba4f399bcc0ee9135c255f96eb05c74e687234f9))
+* loose resolve path ([db27596](https://github.com/lancewuz/fetch-idl/commit/db27596aa6d1f1c8001076c8feffb2342604b3f9))
+
+
+
 ## [0.0.4](https://github.com/lancewuz/fetch-idl/compare/v0.0.3...v0.0.4) (2020-04-15)
 
 
