@@ -1,3 +1,12 @@
+## [0.0.6](https://github.com/lancewuz/fetch-idl/compare/v0.0.5...v0.0.6) (2020-11-18)
+
+
+### Bug Fixes
+
+* delete inaccuracy uri verify ([1c18443](https://github.com/lancewuz/fetch-idl/commit/1c18443ce4616b6307fd1b5ecdc7881a01909e81))
+
+
+
 ## [0.0.5](https://github.com/lancewuz/fetch-idl/compare/v0.0.4...v0.0.5) (2020-08-14)
 
 
