@@ -25,9 +25,9 @@ function gitClone(repository: string, branch: string) {
     repositoryUrl = repositoryUrl.slice(0, repositoryUrl.length - 1);
   }
 
-  if (repositoryUrl.substr(-4) !== '.git') {
-    throw new Error(`invalid repository url: '${repositoryUrl}'`);
-  }
+  // if (repositoryUrl.substr(-4) !== '.git') {
+  //   throw new Error(`invalid repository url: '${repositoryUrl}'`);
+  // }
 
   const repositoryName = (repositoryUrl.split('/').pop() as string).slice(
     0,

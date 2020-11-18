@@ -13,21 +13,21 @@ describe('fetch idl', () => {
     shell.rm('-rf', deleteFiles);
   });
 
-  it('should fail due to invalid repository', function invalidRepo() {
-    this.timeout(threshold);
-    try {
-      fetchIdl(
-        'git@github.com:lancewuz/invalid-repo/',
-        branch,
-        'index',
-        'test/temp'
-      );
-    } catch (err) {
-      return expect(err.message).to.includes('invalid repository url');
-    }
+  // it('should fail due to invalid repository', function invalidRepo() {
+  //   this.timeout(threshold);
+  //   try {
+  //     fetchIdl(
+  //       'git@github.com:lancewuz/invalid-repo/',
+  //       branch,
+  //       'index',
+  //       'test/temp'
+  //     );
+  //   } catch (err) {
+  //     return expect(err.message).to.includes('invalid repository url');
+  //   }
 
-    throw new Error('no errors');
-  });
+  //   throw new Error('no errors');
+  // });
 
   it('should fail due to nonexistent repository', function nonexistentRepo() {
     this.timeout(threshold);
