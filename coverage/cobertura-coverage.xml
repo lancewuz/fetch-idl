@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="71" lines-covered="71" line-rate="1" branches-valid="32" branches-covered="32" branch-rate="1" timestamp="1597395888197" complexity="0" version="0.1">
+<coverage lines-valid="69" lines-covered="69" line-rate="1" branches-valid="30" branches-covered="30" branch-rate="1" timestamp="1605669170041" complexity="0" version="0.1">
   <sources>
     <source>/Users/lancewu/Documents/code/fetch-idl</source>
   </sources>
@@ -17,9 +17,9 @@
             <line number="18" hits="9"/>
           </lines>
         </method>
-        <method name="gitClone" hits="6" signature="()V">
+        <method name="gitClone" hits="5" signature="()V">
           <lines>
-            <line number="22" hits="6"/>
+            <line number="22" hits="5"/>
           </lines>
         </method>
         <method name="getIdlFileMap" hits="12" signature="()V">
@@ -42,9 +42,9 @@
             <line number="125" hits="9"/>
           </lines>
         </method>
-        <method name="fetchIdl" hits="8" signature="()V">
+        <method name="fetchIdl" hits="7" signature="()V">
           <lines>
-            <line number="131" hits="8"/>
+            <line number="131" hits="7"/>
           </lines>
         </method>
         <method name="(anonymous_8)" hits="3" signature="()V">
@@ -69,11 +69,9 @@
         <line number="15" hits="9" branch="false"/>
         <line number="18" hits="9" branch="false"/>
         <line number="19" hits="9" branch="false"/>
-        <line number="23" hits="6" branch="false"/>
-        <line number="24" hits="6" branch="true" condition-coverage="100% (2/2)"/>
-        <line number="25" hits="2" branch="false"/>
-        <line number="28" hits="6" branch="true" condition-coverage="100% (2/2)"/>
-        <line number="29" hits="1" branch="false"/>
+        <line number="23" hits="5" branch="false"/>
+        <line number="24" hits="5" branch="true" condition-coverage="100% (2/2)"/>
+        <line number="25" hits="1" branch="false"/>
         <line number="32" hits="5" branch="false"/>
         <line number="36" hits="5" branch="false"/>
         <line number="37" hits="5" branch="false"/>
@@ -114,9 +112,9 @@
         <line number="127" hits="9" branch="false"/>
         <line number="128" hits="9" branch="false"/>
         <line number="131" hits="1" branch="false"/>
-        <line number="140" hits="8" branch="true" condition-coverage="100% (4/4)"/>
+        <line number="140" hits="7" branch="true" condition-coverage="100% (4/4)"/>
         <line number="141" hits="2" branch="false"/>
-        <line number="144" hits="6" branch="false"/>
+        <line number="144" hits="5" branch="false"/>
         <line number="145" hits="4" branch="false"/>
         <line number="147" hits="4" branch="false"/>
         <line number="149" hits="3" branch="false"/>
