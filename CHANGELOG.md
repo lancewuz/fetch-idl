@@ -1,3 +1,12 @@
+## [0.0.8](https://github.com/lancewuz/fetch-idl/compare/v0.0.7...v0.0.8) (2021-07-23)
+
+
+### Bug Fixes
+
+* shell exec silent for git log ([1e4ae11](https://github.com/lancewuz/fetch-idl/commit/1e4ae111fde9166747c4a40898601a329f5342db))
+
+
+
 ## [0.0.7](https://github.com/lancewuz/fetch-idl/compare/v0.0.6...v0.0.7) (2021-07-23)
 
 
