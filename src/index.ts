@@ -164,6 +164,12 @@ export default function fetchIdl(
     writeFileSync(copyFilePath, fileMap[filename]);
   }
 
+  let commitMessge = 'get the last git commit message failed';
+  const result = shell.exec('git log -1');
+  if (result.code === 0) {
+    commitMessge = result.stdout;
+  }
+
   // // clean and throw error
   // if (typeof error !== 'undefined') {
   //   repositoryReferMap[tempDir] -= 1;
@@ -186,4 +192,8 @@ export default function fetchIdl(
       shell.rm('-rf', tempDir);
     }
   }, 200);
+
+  return {
+    commit: commitMessge,
+  };
 }

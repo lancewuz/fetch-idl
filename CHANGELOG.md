@@ -1,3 +1,12 @@
+## [0.0.7](https://github.com/lancewuz/fetch-idl/compare/v0.0.6...v0.0.7) (2021-07-23)
+
+
+### Features
+
+* support commit message ([dac7642](https://github.com/lancewuz/fetch-idl/commit/dac7642887916831629fc3845f28123035bb87b1))
+
+
+
 ## [0.0.6](https://github.com/lancewuz/fetch-idl/compare/v0.0.5...v0.0.6) (2020-11-18)
 
 
