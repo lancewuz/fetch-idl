@@ -165,7 +165,7 @@ export default function fetchIdl(
   }
 
   let commitMessge = 'get the last git commit message failed';
-  const result = shell.exec('git log -1');
+  const result = shell.exec('git log -1', { silent: true });
   if (result.code === 0) {
     commitMessge = result.stdout;
   }
