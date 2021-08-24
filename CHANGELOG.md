@@ -1,9 +1,10 @@
-## [0.0.8](https://github.com/lancewuz/fetch-idl/compare/v0.0.7...v0.0.8) (2021-07-23)
+## [0.0.9](https://github.com/lancewuz/fetch-idl/compare/v0.0.7...v0.0.9) (2021-08-24)
 
 
 ### Bug Fixes
 
-* shell exec silent for git log ([1e4ae11](https://github.com/lancewuz/fetch-idl/commit/1e4ae111fde9166747c4a40898601a329f5342db))
+* handle same repo names ([be759cc](https://github.com/lancewuz/fetch-idl/commit/be759ccc36a3b5abff81b98de29fc840d1eceb0a))
+* shell exec silent for git log ([d0decd8](https://github.com/lancewuz/fetch-idl/commit/d0decd8a761a48fa47648bd0e1efd2f78f43fde9))
 
 
 
