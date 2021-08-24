@@ -29,7 +29,7 @@ function gitClone(repository: string, branch: string) {
   //   throw new Error(`invalid repository url: '${repositoryUrl}'`);
   // }
 
-  // Handle case: git@code.byted.org:tictoc/service_rpc.git
+  // Handle case: git@code.company.org:tictoc/idl.git
   const repositoryPath = repositoryUrl.split(':').pop() as string;
   const repositoryName = repositoryPath.replace('/', '_').slice(0, -4);
   const minute = Math.floor(Date.now() / (1000 * 60));
