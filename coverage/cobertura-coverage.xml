@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="78" lines-covered="77" line-rate="0.9872" branches-valid="34" branches-covered="32" branch-rate="0.9412" timestamp="1634720607082" complexity="0" version="0.1">
+<coverage lines-valid="78" lines-covered="77" line-rate="0.9872" branches-valid="34" branches-covered="32" branch-rate="0.9412" timestamp="1634720959617" complexity="0" version="0.1">
   <sources>
     <source>/Users/wuliang/Documents/code/fetch-idl</source>
   </sources>
