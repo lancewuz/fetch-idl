@@ -11,3 +11,12 @@ const res = fetchIdl(
 );
 
 console.log(res);
+
+// const resp = fetchIdl(
+//   repository,
+//   'feat/different-branch',
+//   'test/idl/index.*',
+//   `test/temp`
+// );
+
+// console.log(resp);
