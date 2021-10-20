@@ -1,3 +1,4 @@
+// 20211020
 namespace go index
 
 include './dep/common.thrift'
