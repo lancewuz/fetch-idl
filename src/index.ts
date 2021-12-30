@@ -15,7 +15,7 @@ interface RepoCache {
   dir: string;
 }
 
-const repoCacheSeconds = 30;
+const repoCacheSeconds = 180;
 const repoCaches: RepoCache[] = [];
 const fetchTempDir = `${process.env.TMPDIR}fetch-repo`;
 
