@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="87" lines-covered="83" line-rate="0.9540000000000001" branches-valid="39" branches-covered="35" branch-rate="0.8974" timestamp="1640846174618" complexity="0" version="0.1">
+<coverage lines-valid="87" lines-covered="85" line-rate="0.977" branches-valid="39" branches-covered="36" branch-rate="0.9231" timestamp="1640868447588" complexity="0" version="0.1">
   <sources>
     <source>/Users/wuliang/Documents/code/fetch-idl</source>
   </sources>
   <packages>
-    <class name="index.ts" filename="src/index.ts" line-rate="0.9540000000000001" branch-rate="0.8974">
+    <class name="index.ts" filename="src/index.ts" line-rate="0.977" branch-rate="0.9231">
       <methods>
         <method name="getIncludePaths" hits="13" signature="()V">
           <lines>
@@ -126,9 +126,9 @@
         <line number="149" hits="6" branch="true" condition-coverage="50% (1/2)"/>
         <line number="150" hits="6" branch="false"/>
         <line number="151" hits="6" branch="false"/>
-        <line number="153" hits="6" branch="true" condition-coverage="50% (1/2)"/>
-        <line number="154" hits="0" branch="false"/>
-        <line number="155" hits="0" branch="false"/>
+        <line number="153" hits="6" branch="true" condition-coverage="100% (2/2)"/>
+        <line number="154" hits="1" branch="false"/>
+        <line number="155" hits="1" branch="false"/>
         <line number="158" hits="0" branch="false"/>
         <line number="162" hits="1" branch="false"/>
         <line number="171" hits="8" branch="true" condition-coverage="100% (4/4)"/>
