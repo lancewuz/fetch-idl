@@ -8,7 +8,16 @@ import * as glob from 'glob';
 import 'core-js/features/string/match-all';
 // import * as thrift from '@creditkarma/thrift-parser';
 
-const repositoryReferMap: Record<string, { num: number; branch: string }> = {};
+interface RepoCache {
+  url: string;
+  branch: string;
+  time: number;
+  dir: string;
+}
+
+const repoCacheSeconds = 30;
+const repoCaches: RepoCache[] = [];
+const fetchTempDir = `${process.env.TMPDIR}fetch-repo`;
 
 function getIncludePaths(text: string) {
   const regExp = /(?<!(\/\/|\/\*|#).*)(include|cpp_include|import)\s+(['"])(.*?)\3/g;
@@ -19,34 +28,33 @@ function getIncludePaths(text: string) {
   return includePaths;
 }
 
-function gitClone(repository: string, branch: string) {
+function gitClone(repository: string, branch: string): string {
   let repositoryUrl = repository.trim();
   if (repositoryUrl[repositoryUrl.length - 1] === '/') {
     repositoryUrl = repositoryUrl.slice(0, repositoryUrl.length - 1);
   }
 
-  // if (repositoryUrl.substr(-4) !== '.git') {
-  //   throw new Error(`invalid repository url: '${repositoryUrl}'`);
-  // }
+  const seconds = Math.floor(Date.now() / 1000);
+  const cached = repoCaches.find(item => {
+    return (
+      item.url === repositoryUrl &&
+      item.branch === branch &&
+      seconds - item.time <= repoCacheSeconds
+    );
+  });
+
+  if (cached) {
+    cached.time = seconds;
+    return cached.dir;
+  }
 
   // Handle case: git@code.company.org:tic/idl.git
   const repositoryPath = repositoryUrl.split(':').pop() as string;
   const repositoryName = repositoryPath.replace('/', '_').slice(0, -4);
-  const minute = Math.floor(Date.now() / (1000 * 60));
-  const tempDir = `${process.env.TMPDIR}git-${repositoryName}-${process.pid}-${minute}`;
-
-  if (tempDir in repositoryReferMap) {
-    repositoryReferMap[tempDir].num += 1;
-  } else {
-    repositoryReferMap[tempDir] = { num: 1, branch: '' };
-  }
+  const random = Math.floor(Math.random() * 1000);
+  const tempDir = `${fetchTempDir}/git-fetch-${repositoryName}-${process.pid}-${seconds}-${random}`;
 
   if (fs.existsSync(tempDir)) {
-    // Reuse the repository
-    if (branch === repositoryReferMap[tempDir].branch) {
-      return tempDir;
-    }
-
     shell.exec(`rm -rf ${tempDir}`);
   }
 
@@ -61,7 +69,12 @@ function gitClone(repository: string, branch: string) {
     throw new Error(message);
   }
 
-  repositoryReferMap[tempDir].branch = branch;
+  repoCaches.push({
+    url: repositoryUrl,
+    branch,
+    time: Math.floor(Date.now() / 1000),
+    dir: tempDir,
+  });
   return tempDir;
 }
 
@@ -132,6 +145,20 @@ function writeFileSync(filename: string, content: string | Buffer) {
   fs.writeFileSync(filename, content);
 }
 
+function clearCachedRepos() {
+  if (fs.existsSync(fetchTempDir)) {
+    const stats = fs.statSync(fetchTempDir);
+    const seconds = (Date.now() - stats.mtimeMs) / 1000;
+    // Delete Directory modified 1 hours ago
+    if (seconds > 60 * 60 * 1) {
+      shell.rm('-rf', fetchTempDir);
+      fs.mkdirSync(fetchTempDir);
+    }
+  } else {
+    fs.mkdirSync(fetchTempDir);
+  }
+}
+
 export default function fetchIdl(
   repository: string,
   branch: string,
@@ -139,12 +166,13 @@ export default function fetchIdl(
   /* istanbul ignore next */
   outDir = 'idl',
   /* istanbul ignore next */
-  rootDir = '.'
+  rootDir = '.',
 ) {
   if (typeof entryGlob !== 'string' || entryGlob === '') {
     throw new Error('invalid entryGlob');
   }
 
+  clearCachedRepos();
   const tempDir = gitClone(repository, branch);
   const idlRootDir = path.resolve(tempDir, rootDir);
 
@@ -173,29 +201,6 @@ export default function fetchIdl(
   if (result.code === 0) {
     commitMessge = result.stdout;
   }
-
-  // // clean and throw error
-  // if (typeof error !== 'undefined') {
-  //   repositoryReferMap[tempDir].num -= 1;
-
-  //   // delete the outDir when reference equals to 0
-  //   /* istanbul ignore next */
-  //   if (repositoryReferMap[tempDir].num === 0) {
-  //     shell.rm('-rf', tempDir);
-  //   }
-
-  //   throw error;
-  // }
-
-  setTimeout(() => {
-    repositoryReferMap[tempDir].num -= 1;
-
-    // delete the outDir when reference equals to 0
-    /* istanbul ignore next */
-    if (repositoryReferMap[tempDir].num === 0) {
-      shell.rm('-rf', tempDir);
-    }
-  }, 200);
 
   return {
     commit: commitMessge,
