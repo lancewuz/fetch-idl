@@ -166,7 +166,7 @@ export default function fetchIdl(
   /* istanbul ignore next */
   outDir = 'idl',
   /* istanbul ignore next */
-  rootDir = '.',
+  rootDir = '.'
 ) {
   if (typeof entryGlob !== 'string' || entryGlob === '') {
     throw new Error('invalid entryGlob');
