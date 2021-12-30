@@ -1,6 +1,5 @@
 import 'mocha';
 import { expect } from 'chai';
-import * as shell from 'shelljs';
 import fetchIdl from '../src';
 
 const repository = 'git@github.com:lancewuz/fetch-idl.git';
@@ -8,27 +7,6 @@ const branch = 'feat-test';
 const threshold = 9000;
 
 describe('fetch idl', () => {
-  after(() => {
-    const deleteFiles = `${process.env.TMPDIR}git-*`;
-    shell.rm('-rf', deleteFiles);
-  });
-
-  // it('should fail due to invalid repository', function invalidRepo() {
-  //   this.timeout(threshold);
-  //   try {
-  //     fetchIdl(
-  //       'git@github.com:lancewuz/invalid-repo/',
-  //       branch,
-  //       'index',
-  //       'test/temp'
-  //     );
-  //   } catch (err) {
-  //     return expect(err.message).to.includes('invalid repository url');
-  //   }
-
-  //   throw new Error('no errors');
-  // });
-
   it('should fail due to nonexistent repository', function nonexistentRepo() {
     this.timeout(threshold);
     try {
@@ -78,6 +56,11 @@ describe('fetch idl', () => {
     fetchIdl(repository, branch, 'test/idl/index.thrift', 'test/temp');
   });
 
+  it('should fetch thrift files with different branch', function fetchThrift() {
+    this.timeout(threshold);
+    fetchIdl(repository, 'master', 'test/idl/index.thrift', 'test/temp');
+  });
+
   it('should fetch proto files', function fetchProto() {
     this.timeout(threshold);
     fetchIdl(repository, branch, 'test/idl/index.proto', 'test/temp');
@@ -92,25 +75,4 @@ describe('fetch idl', () => {
 
     throw new Error('no errors');
   });
-
-  // it('should fail due to thrift file syntax error', () => {
-  //   try {
-  //     fetchIdl(repository, branch, 'test/idl/error.thrift', 'test/temp');
-  //   } catch (err) {
-  //     return expect(err.message).to.includes('FieldType expected but found');
-  //   }
-
-  //   throw new Error('no errors');
-  // });
-
-  // this test should be placed at last
-  // it('should fail due to proto file syntax error', () => {
-  //   try {
-  //     fetchIdl(repository, branch, 'test/idl/error.proto', 'test/temp');
-  //   } catch (err) {
-  //     return expect(err.message).to.includes('illegal token');
-  //   }
-
-  //   throw new Error('no errors');
-  // });
 });
