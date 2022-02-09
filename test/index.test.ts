@@ -2,7 +2,7 @@ import 'mocha';
 import { expect } from 'chai';
 import fetchIdl from '../src';
 
-const repository = 'git@github.com:lancewuz/fetch-idl.git';
+const repo = 'git@github.com:lancewuz/fetch-idl.git';
 const branch = 'feat-test';
 const threshold = 9000;
 
@@ -10,12 +10,12 @@ describe('fetch idl', () => {
   it('should fail due to nonexistent repository', function nonexistentRepo() {
     this.timeout(threshold);
     try {
-      fetchIdl(
-        'git@github.com:lancewuz/nonexistent-repo.git/',
+      fetchIdl({
+        repo: 'git@github.com:lancewuz/nonexistent-repo.git/',
         branch,
-        'index',
-        'test/temp'
-      );
+        entryGlob: 'index',
+        outDir: 'test/temp',
+      });
     } catch (err) {
       return expect(err.message).to.includes(
         'Could not read from remote repository'
@@ -28,7 +28,12 @@ describe('fetch idl', () => {
   it('should fail due to no files match glob', function fetchThrift() {
     this.timeout(threshold);
     try {
-      fetchIdl(repository, branch, 'test/idl/a/*.thrift', 'test/temp');
+      fetchIdl({
+        repo,
+        branch,
+        entryGlob: 'test/idl/a/*.thrift',
+        outDir: 'test/temp',
+      });
     } catch (err) {
       return expect(err.message).to.includes('match the glob');
     }
@@ -38,7 +43,12 @@ describe('fetch idl', () => {
 
   it('should fail due to invalid entryGlob', () => {
     try {
-      fetchIdl(repository, branch, undefined as any, 'test/temp');
+      fetchIdl({
+        repo,
+        branch,
+        entryGlob: undefined as any,
+        outDir: 'test/temp',
+      });
     } catch (err) {
       return expect(err.message).to.equal('invalid entryGlob');
     }
@@ -48,27 +58,58 @@ describe('fetch idl', () => {
 
   it('should fetch thrift files with glob', function fetchThrift() {
     this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/!(error|index).thrift', 'test/temp');
+    fetchIdl({
+      repo,
+      branch,
+      entryGlob: 'test/idl/!(error|index).thrift',
+      outDir: 'test/temp',
+    });
   });
 
   it('should fetch thrift files', function fetchThrift() {
     this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/index.thrift', 'test/temp');
+    fetchIdl({
+      repo,
+      branch,
+      entryGlob: 'test/idl/index.thrift',
+      outDir: 'test/temp',
+    });
   });
 
   it('should fetch thrift files with different branch', function fetchThrift() {
     this.timeout(threshold);
-    fetchIdl(repository, 'master', 'test/idl/index.thrift', 'test/temp');
+    fetchIdl({
+      repo,
+      branch: 'master',
+      entryGlob: 'test/idl/index.thrift',
+      outDir: 'test/temp',
+    });
+  });
+
+  it('should fetch thrift files with commitId', function fetchThrift() {
+    this.timeout(threshold);
+    fetchIdl({
+      repo,
+      branch: 'master',
+      entryGlob: 'test/idl/index.thrift',
+      outDir: 'test/temp',
+      commitId: 'e220f599438088ef12970',
+    });
   });
 
   it('should fetch proto files', function fetchProto() {
     this.timeout(threshold);
-    fetchIdl(repository, branch, 'test/idl/index.proto', 'test/temp');
+    fetchIdl({
+      repo,
+      branch,
+      entryGlob: 'test/idl/index.proto',
+      outDir: 'test/temp',
+    });
   });
 
   it('should fail due to empty entryGlob', () => {
     try {
-      fetchIdl(repository, branch, '', 'test/temp');
+      fetchIdl({ repo, branch, entryGlob: '', outDir: 'test/temp' });
     } catch (err) {
       return expect(err.message).to.equal('invalid entryGlob');
     }

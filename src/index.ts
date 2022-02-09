@@ -11,6 +11,7 @@ import 'core-js/features/string/match-all';
 interface RepoCache {
   url: string;
   branch: string;
+  commit?: string;
   time: number;
   dir: string;
 }
@@ -18,6 +19,7 @@ interface RepoCache {
 const repoCacheSeconds = 180;
 const repoCaches: RepoCache[] = [];
 const fetchTempDir = `${process.env.TMPDIR}fetch-repo`;
+shell.config.silent = true;
 
 function getIncludePaths(text: string) {
   const regExp = /(?<!(\/\/|\/\*|#).*)(include|cpp_include|import)\s+(['"])(.*?)\3/g;
@@ -28,7 +30,11 @@ function getIncludePaths(text: string) {
   return includePaths;
 }
 
-function gitClone(repository: string, branch: string): string {
+function gitClone(
+  repository: string,
+  branch: string,
+  commitId?: string
+): string {
   let repositoryUrl = repository.trim();
   if (repositoryUrl[repositoryUrl.length - 1] === '/') {
     repositoryUrl = repositoryUrl.slice(0, repositoryUrl.length - 1);
@@ -39,6 +45,7 @@ function gitClone(repository: string, branch: string): string {
     return (
       item.url === repositoryUrl &&
       item.branch === branch &&
+      item.commit === commitId &&
       seconds - item.time <= repoCacheSeconds
     );
   });
@@ -58,8 +65,10 @@ function gitClone(repository: string, branch: string): string {
     shell.exec(`rm -rf ${tempDir}`);
   }
 
-  const command = `git clone ${repositoryUrl} ${tempDir} --depth=1 --quiet --branch ${branch}`;
-  const result = shell.exec(command, { silent: true });
+  const command = `git clone ${repositoryUrl} ${tempDir} ${
+    commitId ? '--single-branch' : '--depth=1'
+  } --quiet --branch ${branch}`;
+  const result = shell.exec(command);
 
   if (result.code !== 0) {
     const stderr = result.stderr as string;
@@ -69,9 +78,24 @@ function gitClone(repository: string, branch: string): string {
     throw new Error(message);
   }
 
+  if (commitId) {
+    const cwd = process.cwd();
+    shell.cd(tempDir);
+    const resetResult = shell.exec(`git reset --hard ${commitId}`);
+    shell.cd(cwd);
+    if (resetResult.code !== 0) {
+      const stderr = result.stderr as string;
+
+      /* istanbul ignore next */
+      const message = stderr.split('fatal:')[1] || 'invalid commitId';
+      throw new Error(message);
+    }
+  }
+
   repoCaches.push({
     url: repositoryUrl,
     branch,
+    commit: commitId,
     time: Math.floor(Date.now() / 1000),
     dir: tempDir,
   });
@@ -159,21 +183,36 @@ function clearCachedRepos() {
   }
 }
 
-export default function fetchIdl(
-  repository: string,
-  branch: string,
-  entryGlob: string,
-  /* istanbul ignore next */
-  outDir = 'idl',
-  /* istanbul ignore next */
-  rootDir = '.'
-) {
+interface FetchParams {
+  // The repository of idl files
+  repo: string;
+  // The branch of the repo
+  branch: string;
+  // The entry file path expressed by Glob
+  entryGlob: string;
+  // The output directory for idl files
+  outDir?: string;
+  // The root directory of the entryGlob
+  rootDir?: string;
+  // The commit id of the repo
+  commitId?: string;
+}
+
+export default function fetchIdl(params: FetchParams) {
+  const {
+    repo,
+    branch,
+    entryGlob,
+    outDir = 'idl',
+    rootDir = '.',
+    commitId,
+  } = params;
   if (typeof entryGlob !== 'string' || entryGlob === '') {
     throw new Error('invalid entryGlob');
   }
 
   clearCachedRepos();
-  const tempDir = gitClone(repository, branch);
+  const tempDir = gitClone(repo, branch, commitId);
   const idlRootDir = path.resolve(tempDir, rootDir);
 
   const filePaths = glob
@@ -197,7 +236,7 @@ export default function fetchIdl(
   }
 
   let commitMessge = 'get the last git commit message failed';
-  const result = shell.exec('git log -1', { silent: true });
+  const result = shell.exec('git log -1');
   if (result.code === 0) {
     commitMessge = result.stdout;
   }
