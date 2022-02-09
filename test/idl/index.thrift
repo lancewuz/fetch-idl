@@ -1,4 +1,4 @@
-// 20211020
+// 20220209
 namespace go index
 
 include './dep/common.thrift'
