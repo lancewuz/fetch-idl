@@ -2,6 +2,7 @@
 
 import * as shell from 'shelljs';
 import * as path from 'path';
+import * as os from 'os';
 import * as fs from 'fs';
 import * as glob from 'glob';
 // import * as proto from 'proto-parser';
@@ -18,7 +19,7 @@ interface RepoCache {
 
 const repoCacheSeconds = 180;
 const repoCaches: RepoCache[] = [];
-const fetchTempDir = `${process.env.TMPDIR}fetch-repo`;
+const fetchTempDir = `${os.tmpdir()}fetch-repo`;
 shell.config.silent = true;
 
 function getIncludePaths(text: string) {
