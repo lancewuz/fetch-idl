@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="98" lines-covered="93" line-rate="0.9490000000000001" branches-valid="48" branches-covered="43" branch-rate="0.8957999999999999" timestamp="1644996319080" complexity="0" version="0.1">
+<coverage lines-valid="98" lines-covered="94" line-rate="0.9592" branches-valid="48" branches-covered="43" branch-rate="0.8957999999999999" timestamp="1645002539949" complexity="0" version="0.1">
   <sources>
     <source>/Users/wuliang/Documents/code/fetch-idl</source>
   </sources>
   <packages>
-    <class name="index.ts" filename="src/index.ts" line-rate="0.9490000000000001" branch-rate="0.8957999999999999">
+    <class name="index.ts" filename="src/index.ts" line-rate="0.9592" branch-rate="0.8957999999999999">
       <methods>
         <method name="getIncludePaths" hits="17" signature="()V">
           <lines>
@@ -133,13 +133,13 @@
         <line number="168" hits="17" branch="false"/>
         <line number="169" hits="17" branch="false"/>
         <line number="170" hits="17" branch="false"/>
-        <line number="174" hits="7" branch="true" condition-coverage="100% (2/2)"/>
-        <line number="175" hits="6" branch="false"/>
-        <line number="176" hits="6" branch="false"/>
-        <line number="178" hits="6" branch="true" condition-coverage="50% (1/2)"/>
-        <line number="179" hits="0" branch="false"/>
-        <line number="180" hits="0" branch="false"/>
-        <line number="183" hits="1" branch="false"/>
+        <line number="174" hits="7" branch="true" condition-coverage="50% (1/2)"/>
+        <line number="175" hits="7" branch="false"/>
+        <line number="176" hits="7" branch="false"/>
+        <line number="178" hits="7" branch="true" condition-coverage="100% (2/2)"/>
+        <line number="179" hits="1" branch="false"/>
+        <line number="180" hits="1" branch="false"/>
+        <line number="183" hits="0" branch="false"/>
         <line number="202" hits="1" branch="false"/>
         <line number="210" hits="9" branch="false"/>
         <line number="211" hits="9" branch="true" condition-coverage="100% (4/4)"/>
