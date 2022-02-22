@@ -19,7 +19,7 @@ interface RepoCache {
 
 const repoCacheSeconds = 180;
 const repoCaches: RepoCache[] = [];
-const fetchTempDir = `${os.tmpdir()}fetch-repo`;
+const fetchTempDir = path.resolve(os.tmpdir(), 'fetch-repo');
 shell.config.silent = true;
 
 function getIncludePaths(text: string) {
@@ -60,7 +60,10 @@ function gitClone(
   const repositoryPath = repositoryUrl.split(':').pop() as string;
   const repositoryName = repositoryPath.replace('/', '_').slice(0, -4);
   const random = Math.floor(Math.random() * 1000);
-  const tempDir = `${fetchTempDir}/git-fetch-${repositoryName}-${process.pid}-${seconds}-${random}`;
+  const tempDir = path.resolve(
+    fetchTempDir,
+    `git-fetch-${repositoryName}-${process.pid}-${seconds}-${random}`
+  );
 
   if (fs.existsSync(tempDir)) {
     shell.exec(`rm -rf ${tempDir}`);
