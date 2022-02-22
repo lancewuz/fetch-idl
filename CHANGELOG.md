@@ -1,11 +1,12 @@
-## 0.1.1 (2022-02-16)
+## 0.1.2 (2022-02-22)
 
 
 ### Bug Fixes
 
 * adjust cache seconds ([5864ce9](https://github.com/lancewuz/fetch-idl/commit/5864ce9f954fec3a70b540a2cdae037ce67ea849))
 * handle same repo names ([a39035a](https://github.com/lancewuz/fetch-idl/commit/a39035a7e94f7a1b2421f793ef47de185e2a8bca))
-* os tmpdir ([4007ba6](https://github.com/lancewuz/fetch-idl/commit/4007ba6fb3130fa7875dd4325131b16599f645bb))
+* os tmpdir ([e7f4500](https://github.com/lancewuz/fetch-idl/commit/e7f4500cc6c86defbf49114ea2992e1b97406002))
+* resolve temp path ([f850911](https://github.com/lancewuz/fetch-idl/commit/f850911043e555dcab3c8e01290e47d8dece5027))
 
 
 ### Features
