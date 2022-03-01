@@ -79,7 +79,7 @@ function gitClone(
 
     /* istanbul ignore next */
     const message = stderr.split('fatal:')[1] || 'git clone failed';
-    throw new Error(message);
+    throw new Error(command + os.EOL + message);
   }
 
   if (commitId) {
@@ -91,7 +91,8 @@ function gitClone(
       const stderr = result.stderr as string;
 
       /* istanbul ignore next */
-      const message = stderr.split('fatal:')[1] || 'invalid commitId';
+      const message =
+        stderr.split('fatal:')[1] || `invalid commitId: ${commitId}`;
       throw new Error(message);
     }
   }
