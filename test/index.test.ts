@@ -17,6 +17,9 @@ describe('fetch idl', () => {
         outDir: 'test/temp',
       });
     } catch (err) {
+      expect(err.message).to.includes(
+        'git clone git@github.com:lancewuz/nonexistent-repo.git'
+      );
       return expect(err.message).to.includes(
         'Could not read from remote repository'
       );
